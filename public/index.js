@@ -52,28 +52,35 @@ function getUsers(event) {
 function getPosts(event) {
   event.preventDefault();
   const id = event.srcElement.attributes.id.value.slice(7);
-  fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then((posts) => {
-      posts.forEach((post) => {
-        const { title, body } = post;
-        const displayedPost = document.createElement("li");
-        displayedPost.classList.add("displayed-post");
-        const postTitle = document.createElement("h3");
-        postTitle.classList.add("displayed-post-title");
-        postTitle.innerHTML = title;
-        const postBody = document.createElement("p");
-        postBody.classList.add("displayed-post-body");
-        postBody.innerHTML = body;
-        displayedPost.append(postTitle, postBody);
-        const userPostContainer = document.getElementById(
-          `post-container-${id}`
-        );
-        userPostContainer.append(displayedPost);
+  if (document.getElementById(`button-${id}`).innerHTML === "Show Posts") {
+    fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((posts) => {
+        posts.forEach((post) => {
+          const { title, body } = post;
+          const displayedPost = document.createElement("li");
+          displayedPost.classList.add("displayed-post");
+          const postTitle = document.createElement("h3");
+          postTitle.classList.add("displayed-post-title");
+          postTitle.innerHTML = title;
+          const postBody = document.createElement("p");
+          postBody.classList.add("displayed-post-body");
+          postBody.innerHTML = body;
+          displayedPost.append(postTitle, postBody);
+          const userPostContainer = document.getElementById(
+            `post-container-${id}`
+          );
+          userPostContainer.append(displayedPost);
+          const activeButton = document.getElementById(`button-${id}`);
+          activeButton.innerHTML = "Hide Posts";
+        });
       });
-    });
+  } else {
+    document.getElementById(`button-${id}`).innerHTML = "Show Posts";
+    document.getElementById(`post-container-${id}`).innerHTML = "";
+  }
 }
 
 loadUsersButton.addEventListener("click", getUsers);
