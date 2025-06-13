@@ -13,7 +13,7 @@ function getUsers(event) {
         userItem.classList.add("user-card");
         const userName = document.createElement("h2");
         userName.classList.add("username");
-        userName.textContent = name;
+        userName.innerHTML = name;
 
         userItem.append(userName);
         resultList.append(userItem);
