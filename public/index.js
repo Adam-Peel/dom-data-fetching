@@ -27,7 +27,10 @@ function getUsers(event) {
         userButton.classList.add("show-user-post-button");
         userButton.setAttribute("id", `button-${id}`);
         userButton.innerHTML = "Show Posts";
-        userItem.append(userName, userButton);
+        const postContainer = document.createElement("ul");
+        postContainer.classList.add("user-post-container");
+        postContainer.setAttribute("id", `post-container-${id}`);
+        userItem.append(userName, userButton, postContainer);
         resultList.append(userItem);
       })
     )
@@ -49,7 +52,28 @@ function getUsers(event) {
 function getPosts(event) {
   event.preventDefault();
   const id = event.srcElement.attributes.id.value.slice(7);
-  console.log(id);
+  fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((posts) => {
+      posts.forEach((post) => {
+        const { title, body } = post;
+        const displayedPost = document.createElement("li");
+        displayedPost.classList.add("displayed-post");
+        const postTitle = document.createElement("h3");
+        postTitle.classList.add("displayed-post-title");
+        postTitle.innerHTML = title;
+        const postBody = document.createElement("p");
+        postBody.classList.add("displayed-post-body");
+        postBody.innerHTML = body;
+        displayedPost.append(postTitle, postBody);
+        const userPostContainer = document.getElementById(
+          `post-container-${id}`
+        );
+        userPostContainer.append(displayedPost);
+      });
+    });
 }
 
 loadUsersButton.addEventListener("click", getUsers);
