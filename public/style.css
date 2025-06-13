@@ -20,9 +20,13 @@ h1 {
 }
 
 #controls,
-#status-info,
-#filter-area {
+#status-info {
   display: grid;
+  place-content: center;
+}
+
+#filter-area {
+  display: flex;
   place-content: center;
 }
 

@@ -1,13 +1,14 @@
 const loadUsersButton = document.getElementById("load-users");
 let showPostButtons;
 const resultList = document.getElementById("results-list");
-const filterArea = document.getElementById("filter-area");
+const filterBox = document.getElementById("filter-area-box");
+const filterAreaButton = document.getElementById("filter-area-button");
 const statusMessage = document.getElementById("status-message");
 const namesLookup = {};
 
 function getUsers(event) {
   resultList.innerHTML = "";
-  filterArea.innerHTML = "";
+  filterBox.innerHTML = "";
   statusMessage.classList.add("loading-message");
   statusMessage.innerHTML = "Loading...";
 
@@ -40,11 +41,16 @@ function getUsers(event) {
       })
     )
     .then(() => {
-      const filterBox = document.createElement("input");
-      filterBox.setAttribute("id", "filter-box");
-      filterBox.setAttribute("placeholder", "Type here to filter by user");
-      filterArea.append(filterBox);
-      filterBox.addEventListener("input", filterPosts);
+      const filterInputBox = document.createElement("input");
+      const filterButton = document.createElement("button");
+      filterButton.setAttribute("id", "filter-button");
+      filterButton.innerHTML = "Clear Filter";
+      filterAreaButton.append(filterButton);
+      filterButton.addEventListener("click", resetFilterInput);
+      filterInputBox.setAttribute("id", "filter-box");
+      filterInputBox.setAttribute("placeholder", "Type here to filter by user");
+      filterBox.append(filterInputBox);
+      filterInputBox.addEventListener("input", filterPosts);
       showPostButtons = document.getElementsByClassName(
         "show-user-post-button"
       );
@@ -52,6 +58,7 @@ function getUsers(event) {
       userButtons.forEach((button) => {
         button.addEventListener("click", getPosts);
       });
+      document.getElementById("load-users").classList.add("hidden-card");
     })
     .catch((err) => {
       statusMessage.innerHTML = err;
@@ -112,6 +119,23 @@ function getPosts(event) {
     document.getElementById(`button-${id}`).innerHTML = "Show Posts";
     document.getElementById(`post-container-${id}`).innerHTML = "";
   }
+}
+
+function resetFilterInput() {
+  if (document.getElementById("filter-box").value !== "") {
+    document.getElementById("filter-box").value = " ";
+    const cards = document.getElementsByClassName("hidden-card");
+    Array.from(cards).forEach((card) => {
+      card.classList.remove("hidden-card");
+    });
+    for (const key in namesLookup) {
+      document.getElementById(`post-container-${key}`).innerHTML = "";
+      document.getElementById(`button-${key}`).innerHTML = "Show Posts";
+    }
+    statusMessage.innerHTML = "";
+    statusMessage.classList.remove("error-message");
+  }
+  document.getElementById("load-users").classList.add("hidden-card");
 }
 
 loadUsersButton.addEventListener("click", getUsers);
