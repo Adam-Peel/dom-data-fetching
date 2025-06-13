@@ -19,12 +19,14 @@ h1 {
   align-items: center;
 }
 
-#controls {
+#controls,
+#status-info {
   display: grid;
   place-content: center;
 }
 
 #load-users {
+  font-size: 1.2rem;
   margin-top: 20px;
   padding: 10px;
 }
@@ -39,4 +41,17 @@ h1 {
   padding: 5px;
   margin: 5px;
   border-radius: 10px;
+}
+
+#status-message {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.loading-message {
+  color: navy;
+}
+
+.error-message {
+  color: maroon;
 }
