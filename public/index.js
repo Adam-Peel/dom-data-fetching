@@ -60,13 +60,23 @@ function getUsers(event) {
 }
 
 function filterPosts(event) {
+  let hideCount = Object.keys(namesLookup).length;
   console.log(this.value);
   for (const key in namesLookup) {
     if (!namesLookup[key].includes(this.value.toLowerCase())) {
       document.getElementById(`card-${key}`).classList.add("hidden-card");
+      hideCount--;
     } else {
       document.getElementById(`card-${key}`).classList.remove("hidden-card");
+      hideCount++;
     }
+  }
+  if (hideCount === 0) {
+    statusMessage.innerHTML = "No users found";
+    statusMessage.classList.add("error-message");
+  } else {
+    statusMessage.innerHTML = "";
+    statusMessage.classList.remove("error-message");
   }
 }
 
@@ -105,31 +115,3 @@ function getPosts(event) {
 }
 
 loadUsersButton.addEventListener("click", getUsers);
-
-/*
-address
-: 
-{street: 'Kulas Light', suite: 'Apt. 556', city: 'Gwenborough', zipcode: '92998-3874', geo: {…}}
-company
-: 
-{name: 'Romaguera-Crona', catchPhrase: 'Multi-layered client-server neural-net', bs: 'harness real-time e-markets'}
-email
-: 
-"Sincere@april.biz"
-id
-: 
-1
-name
-: 
-"Leanne Graham"
-phone
-: 
-"1-770-736-8031 x56442"
-username
-: 
-"Bret"
-website
-: 
-"hildegard.org"
-
-*/
