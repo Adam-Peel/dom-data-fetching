@@ -3,10 +3,16 @@ const resultList = document.getElementById("results-list");
 const statusMessage = document.getElementById("status-message");
 
 function getUsers(event) {
+  resultList.innerHTML = "";
+  statusMessage.classList.add("loading-message");
+  statusMessage.innerHTML = "Loading...";
+
   event.preventDefault();
   fetch("https://jsonplaceholder.typicode.com/users")
     .then((response) => {
       console.log(response.status);
+      statusMessage.innerHTML = "";
+      statusMessage.classList.remove("error-message", "loading-message");
       return response.json();
     })
     .then((body) =>
