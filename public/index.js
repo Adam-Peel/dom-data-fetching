@@ -1,10 +1,13 @@
 const loadUsersButton = document.getElementById("load-users");
 let showPostButtons;
 const resultList = document.getElementById("results-list");
+const filterArea = document.getElementById("filter-area");
 const statusMessage = document.getElementById("status-message");
+const namesLookup = {};
 
 function getUsers(event) {
   resultList.innerHTML = "";
+  filterArea.innerHTML = "";
   statusMessage.classList.add("loading-message");
   statusMessage.innerHTML = "Loading...";
 
@@ -18,8 +21,10 @@ function getUsers(event) {
     .then((body) =>
       body.forEach((user) => {
         const { id, name } = user;
+        namesLookup[id] = name.toLowerCase();
         const userItem = document.createElement("li");
         userItem.classList.add("user-card");
+        userItem.setAttribute("id", `card-${id}`);
         const userName = document.createElement("h2");
         userName.classList.add("username");
         userName.innerHTML = name;
@@ -35,6 +40,11 @@ function getUsers(event) {
       })
     )
     .then(() => {
+      const filterBox = document.createElement("input");
+      filterBox.setAttribute("id", "filter-box");
+      filterBox.setAttribute("placeholder", "Type here to filter by user");
+      filterArea.append(filterBox);
+      filterBox.addEventListener("input", filterPosts);
       showPostButtons = document.getElementsByClassName(
         "show-user-post-button"
       );
@@ -47,6 +57,17 @@ function getUsers(event) {
       statusMessage.innerHTML = err;
       statusMessage.classList.add("error-message");
     });
+}
+
+function filterPosts(event) {
+  console.log(this.value);
+  for (const key in namesLookup) {
+    if (!namesLookup[key].includes(this.value.toLowerCase())) {
+      document.getElementById(`card-${key}`).classList.add("hidden-card");
+    } else {
+      document.getElementById(`card-${key}`).classList.remove("hidden-card");
+    }
+  }
 }
 
 function getPosts(event) {
