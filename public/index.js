@@ -1,4 +1,5 @@
 const loadUsersButton = document.getElementById("load-users");
+let showPostButtons;
 const resultList = document.getElementById("results-list");
 const statusMessage = document.getElementById("status-message");
 
@@ -10,44 +11,50 @@ function getUsers(event) {
   event.preventDefault();
   fetch("https://jsonplaceholder.typicode.com/users")
     .then((response) => {
-      console.log(response.status);
       statusMessage.innerHTML = "";
       statusMessage.classList.remove("error-message", "loading-message");
       return response.json();
     })
     .then((body) =>
       body.forEach((user) => {
-        const { name } = user;
+        const { id, name } = user;
         const userItem = document.createElement("li");
         userItem.classList.add("user-card");
         const userName = document.createElement("h2");
         userName.classList.add("username");
         userName.innerHTML = name;
-
-        userItem.append(userName);
+        const userButton = document.createElement("button");
+        userButton.classList.add("show-user-post-button");
+        userButton.setAttribute("id", `button-${id}`);
+        userButton.innerHTML = "Show Posts";
+        userItem.append(userName, userButton);
         resultList.append(userItem);
       })
     )
+    .then(() => {
+      showPostButtons = document.getElementsByClassName(
+        "show-user-post-button"
+      );
+      const userButtons = [...showPostButtons];
+      userButtons.forEach((button) => {
+        button.addEventListener("click", getPosts);
+      });
+    })
     .catch((err) => {
       statusMessage.innerHTML = err;
       statusMessage.classList.add("error-message");
     });
 }
 
+function getPosts(event) {
+  event.preventDefault();
+  const id = event.srcElement.attributes.id.value.slice(7);
+  console.log(id);
+}
+
 loadUsersButton.addEventListener("click", getUsers);
 
 /*
-loading...
-
-no response (network issue etc.)
-no users in response
-
-
-
-
-
-
-
 address
 : 
 {street: 'Kulas Light', suite: 'Apt. 556', city: 'Gwenborough', zipcode: '92998-3874', geo: {…}}
