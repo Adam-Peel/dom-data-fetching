@@ -1,0 +1,30 @@
+* {
+  line-height: 1.5rem;
+  font-family: sans-serif;
+}
+
+body {
+  margin-top: 0px;
+}
+
+header {
+  background-color: palegoldenrod;
+  height: 40px;
+}
+
+h1 {
+  display: grid;
+  place-content: center;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+#controls {
+  display: grid;
+  place-content: center;
+}
+
+#load-users {
+  margin-top: 20px;
+  padding: 10px;
+}
